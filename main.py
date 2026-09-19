@@ -80,6 +80,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--gui", action="store_true",
                          help="Launch the live Pygame 2D visualization window instead of headless/ASCII mode. "
                               "Requires `pip install pygame`. Controls: SPACE=pause/resume, R=reset, +/-=speed.")
+    parser.add_argument("--gui3d", action="store_true",
+                         help="Launch the live 3D visualization window (PyOpenGL). Requires "
+                              "`pip install pygame PyOpenGL PyOpenGL_accelerate`. Controls: SPACE=pause/resume, "
+                              "R=reset, C=reset camera, arrow keys=orbit camera, +/-=zoom.")
+    
     parser.add_argument("--record-trace", type=str, default=None,
                          help="Path to write a JSON trace of the run (e.g. data/results/trace.json), "
                               "for offline visual playback in a browser via tools/build_trace_viewer.py.")
@@ -343,6 +348,44 @@ def run_gui(args, sim: Simulator) -> int:
 
 
 
+
+def run_gui3d(args, sim: Simulator) -> int:
+    """Launch the live 3D visualization (PyOpenGL + pygame). Same
+    monitoring-only, single-process pattern as run_gui() - see that
+    function's docstring. See simulation/renderer_3d.py's module
+    docstring for the full controls list and the disclosed caveat that
+    this has not been visually run-tested during development (neither
+    pygame nor PyOpenGL were installable in the build sandbox).
+    """
+    try:
+        from simulation.renderer_3d import Renderer3D
+    except ImportError as e:
+        print(f"\n[!] Could not import 3D renderer module: {e}")
+        return 1
+
+    print("=" * 60)
+    print("DECENTRALIZED MULTI-ROBOT WAREHOUSE SIMULATION - 3D GUI (PyOpenGL)")
+    print("=" * 60)
+    print("Controls: SPACE=pause/resume  R=reset  C=reset camera")
+    print("          arrow keys=orbit camera  +/-=zoom  (close window to quit)")
+    print("-" * 60)
+
+    try:
+        renderer = Renderer3D(sim)
+    except ImportError as e:
+        print(f"\n[!] Pygame and/or PyOpenGL are not installed: {e}")
+        print("    Install both with: pip install pygame PyOpenGL PyOpenGL_accelerate")
+        return 1
+
+    renderer.run()
+
+    print("\nFinal summary:")
+    import json
+    print(json.dumps(sim.summary(), indent=2))
+    return 0
+
+
+
 def main(argv=None) -> int:
     configure_logging()
     args = build_arg_parser().parse_args(argv)
@@ -357,7 +400,8 @@ def main(argv=None) -> int:
         return run_scenario(args)
 
     sim = build_simulation(args)
-
+    if args.gui3d:
+        return run_gui3d(args, sim)
     if args.gui:
         return run_gui(args, sim)
     elif args.dashboard:
@@ -366,6 +410,10 @@ def main(argv=None) -> int:
         run_headless(args, sim)
 
     return 0
+
+
+
+
 
 if __name__ == "__main__":
     sys.exit(main())

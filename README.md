@@ -378,3 +378,9 @@ py -3.12 -m venv .venv
 .venv\Scripts\activate
 python --version
 ```
+
+```bash
+python main.py --gui --robots 3 #for 2d
+python main.py --gui3d --robots 3 # for 3d
+
+```
