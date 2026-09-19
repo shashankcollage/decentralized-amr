@@ -76,7 +76,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
                          help="Run the simulation in real time with the live Flask monitoring "
                               f"dashboard at http://{config.DASHBOARD_HOST}:{config.DASHBOARD_PORT}")
     parser.add_argument("--no-gui", action="store_true", default=True,
-                         help="Run headless with ASCII rendering (pygame GUI added in a later phase).")
+                         help="Run headless with ASCII rendering (default). Overridden by --gui.")
+    parser.add_argument("--gui", action="store_true",
+                         help="Launch the live Pygame 2D visualization window instead of headless/ASCII mode. "
+                              "Requires `pip install pygame`. Controls: SPACE=pause/resume, R=reset, +/-=speed.")
     parser.add_argument("--record-trace", type=str, default=None,
                          help="Path to write a JSON trace of the run (e.g. data/results/trace.json), "
                               "for offline visual playback in a browser via tools/build_trace_viewer.py.")
@@ -301,6 +304,45 @@ def run_benchmark_mode(args) -> int:
     return 0
 
 
+
+
+def run_gui(args, sim: Simulator) -> int:
+    """Launch the live Pygame 2D visualization (project spec section 30).
+
+    Unlike --dashboard (which drives the simulator on a background thread
+    and serves Flask separately), the GUI drives the simulator directly
+    in its own render loop - simpler for a single-process desktop app,
+    and there is no dashboard-independence property to demonstrate here
+    since there's no separate monitoring process at all.
+    """
+    try:
+        from simulation.renderer import Renderer
+    except ImportError as e:
+        print(f"\n[!] Could not import renderer module: {e}")
+        return 1
+
+    print("=" * 60)
+    print("DECENTRALIZED MULTI-ROBOT WAREHOUSE SIMULATION - PYGAME GUI")
+    print("=" * 60)
+    print("Controls: SPACE=pause/resume  R=reset  +/-=speed  (close window to quit)")
+    print("-" * 60)
+
+    try:
+        renderer = Renderer(sim)
+    except ImportError as e:
+        print(f"\n[!] Pygame is not installed: {e}")
+        print("    Install it with: pip install pygame")
+        return 1
+
+    renderer.run()
+
+    print("\nFinal summary:")
+    import json
+    print(json.dumps(sim.summary(), indent=2))
+    return 0
+
+
+
 def main(argv=None) -> int:
     configure_logging()
     args = build_arg_parser().parse_args(argv)
@@ -311,18 +353,19 @@ def main(argv=None) -> int:
     if args.baseline and not args.scenario:
         args.scenario = "simple"
 
-    if args.scenario:
+    if args.scenario and not args.gui:
         return run_scenario(args)
 
     sim = build_simulation(args)
 
-    if args.dashboard:
+    if args.gui:
+        return run_gui(args, sim)
+    elif args.dashboard:
         run_with_dashboard(args, sim)
     else:
         run_headless(args, sim)
 
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
