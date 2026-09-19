@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {"task_id": "T1", "pickup_location": [2, 2],   "dropoff_location": [17, 17], "priority": 0.5},
+    {"task_id": "T2", "pickup_location": [2, 17],  "dropoff_location": [17, 10], "priority": 0.5},
+    {"task_id": "T3", "pickup_location": [17, 2],  "dropoff_location": [2, 10],  "priority": 0.7},
+    {"task_id": "T4", "pickup_location": [2, 2],   "dropoff_location": [17, 10], "priority": 0.3},
+    {"task_id": "T5", "pickup_location": [2, 17],  "dropoff_location": [2, 10],  "priority": 0.6},
+    {"task_id": "T6", "pickup_location": [17, 2],  "dropoff_location": [17, 17], "priority": 0.4}
+  ]
+}

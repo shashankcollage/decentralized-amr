@@ -1,0 +1,35 @@
+:root { color-scheme: light dark; }
+body {
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #14161a; color: #e8e8ea; margin: 0; padding: 20px;
+}
+h1 { font-size: 18px; margin: 0 0 4px 0; }
+.sub { color: #9aa0a6; font-size: 13px; margin-bottom: 16px; max-width: 720px; }
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.stat-card {
+  background: #1c1f26; border: 1px solid #333844; border-radius: 8px;
+  padding: 10px 14px; min-width: 120px;
+}
+.stat-card .label { font-size: 11px; color: #9aa0a6; text-transform: uppercase; }
+.stat-card .value { font-size: 20px; font-weight: 700; margin-top: 2px; }
+.layout { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+canvas { background: #1f2229; border-radius: 8px; border: 1px solid #333844; }
+.panel {
+  background: #1c1f26; border-radius: 8px; padding: 14px 16px;
+  min-width: 320px; border: 1px solid #333844;
+}
+.panel h3 { margin-top: 0; font-size: 14px; color: #9aa0a6; }
+.controls { display: flex; align-items: center; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
+button {
+  background: #2e5cff; color: white; border: none; border-radius: 6px;
+  padding: 8px 16px; font-size: 14px; cursor: pointer;
+}
+button:hover { background: #4a72ff; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #2a2e37; }
+th { color: #9aa0a6; font-weight: 600; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; color: #14161a; font-weight: 600; }
+.frame-info { font-size: 13px; color: #9aa0a6; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; margin-top: 10px; color: #9aa0a6; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }

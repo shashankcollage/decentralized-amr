@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Decentralized AMR - Live Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Decentralized Multi-Robot Warehouse &mdash; Live Dashboard</h1>
+  <div class="sub">
+    Monitoring only. This page never issues movement commands - every robot's
+    decisions are made independently in its own edge-computing loop. If this
+    page (or the whole Flask process) stops, the simulation keeps running.
+  </div>
+
+  <div class="stat-row" id="statRow"></div>
+
+  <div class="layout">
+    <div>
+      <canvas id="canvas"></canvas>
+      <div class="controls">
+        <button id="pauseBtn">Pause</button>
+        <button id="resumeBtn">Resume</button>
+        <span class="frame-info" id="frameInfo"></span>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="panel">
+      <h3>Fleet</h3>
+      <table>
+        <thead>
+          <tr><th>Robot</th><th>Pos</th><th>Status</th><th>Battery</th><th>Dist</th><th>Collisions</th></tr>
+        </thead>
+        <tbody id="robotTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const POLL_INTERVAL_MS = {{ poll_interval_ms }};
+  </script>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
