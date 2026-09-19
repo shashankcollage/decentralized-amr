@@ -370,10 +370,11 @@ overhead findings above); and re-tune `WAIT_TIMEOUT`/backoff parameters
 against a wider sweep of contention levels before trusting the
 improvement percentage on any single scenario.
 
-
+```bash
 deactivate
 cd "C:\Users\shash\Desktop\test sih\decentralized_amr"
 rmdir /s /q .venv
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 python --version
+```
